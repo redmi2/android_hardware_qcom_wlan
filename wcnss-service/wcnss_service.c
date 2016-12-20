@@ -364,13 +364,10 @@ out_nocopy:
 	property_set("wlan.driver.config", WLAN_INI_FILE_DEST);
 	return;
 }
-unsigned int convert_string_to_hex(char* string)
 
-#ifdef WCNSS_QMI
+
 void setup_wcnss_parameters(int *cal, int nv_mac_addr)
-#else
-void setup_wcnss_parameters(int *cal)
-#endif
+
 {
 	char msg[WCNSS_MAX_CMD_LEN];
 	char serial[PROPERTY_VALUE_MAX];
@@ -755,8 +752,8 @@ int main(int argc, char *argv[])
 	UNUSED(argc), UNUSED(argv);
 	int rc;
 	int fd_dev, ret_cal;
-#ifdef WCNSS_QMI
 	int nv_mac_addr = FAILED;
+#ifdef WCNSS_QMI
 #ifdef MDM_DETECT
 	struct dev_info mdm_detect_info;
 #endif
@@ -835,11 +832,8 @@ nomodem:
 
 	dynamic_nv_replace();
 
-#ifdef WCNSS_QMI
 	setup_wcnss_parameters(&ret_cal, nv_mac_addr);
-#else
-	setup_wcnss_parameters(&ret_cal);
-#endif
+
 
 	fd_dev = open(WCNSS_DEVICE, O_RDWR);
 	if (fd_dev < 0) {
